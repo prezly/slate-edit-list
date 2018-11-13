@@ -8,7 +8,7 @@ export default function(plugin, change) {
             key: 'Backspace'
         },
         change,
-        {}
+        () => {}
     );
 
     // Selection check

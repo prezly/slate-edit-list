@@ -10,18 +10,15 @@ import EditList from '../lib';
 
 // Provide the value with
 function deserializeValue(plugin, value) {
-    const SCHEMA = Slate.Schema.create({
-        plugins: [plugin]
-    });
-
-    return Slate.Value.fromJSON(
+    return new Slate.Editor({
+      plugins: [plugin],
+      value: Slate.Value.fromJSON(
         {
-            selection: value.selection,
-            document: value.document,
-            schema: SCHEMA
-        },
-        { normalize: false }
-    );
+          selection: value.selection,
+          document: value.document,
+        }
+      )
+    });
 }
 
 describe('slate-edit-list', () => {
@@ -38,20 +35,22 @@ describe('slate-edit-list', () => {
                 require(path.resolve(dir, 'input.js')).default
             );
 
+          // console.log('input', input);
+
             const expectedPath = path.resolve(dir, 'expected.js');
             const expected =
                 fs.existsSync(expectedPath) &&
                 deserializeValue(plugin, require(expectedPath).default);
 
             const runChange = require(path.resolve(dir, 'change.js')).default;
+          // console.log('runChange', runChange);
 
-            const newChange = runChange(plugin, input.change());
-
+            const newChange = runChange(plugin, input);
             if (expected) {
-                const actual = newChange.value;
+                const actual = newChange.value.document;
 
-                expect(hyperprint(actual, { strict: true })).toEqual(
-                    hyperprint(expected, { strict: true })
+                expect(hyperprint(actual, { strict: false })).toEqual(
+                    hyperprint(expected.value.document, { strict: false })
                 );
             }
         });
