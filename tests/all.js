@@ -35,15 +35,12 @@ describe('slate-edit-list', () => {
                 require(path.resolve(dir, 'input.js')).default
             );
 
-          // console.log('input', input);
-
             const expectedPath = path.resolve(dir, 'expected.js');
             const expected =
                 fs.existsSync(expectedPath) &&
                 deserializeValue(plugin, require(expectedPath).default);
 
             const runChange = require(path.resolve(dir, 'change.js')).default;
-          // console.log('runChange', runChange);
 
             const newChange = runChange(plugin, input);
             if (expected) {
