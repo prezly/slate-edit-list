@@ -1,3 +1,3 @@
-export default function(plugin, change) {
-    return change.command(plugin.changes.increaseItemDepth);
+export default function(plugin, editor) {
+    return editor.command(plugin.changes.increaseItemDepth);
 }
